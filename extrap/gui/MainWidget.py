@@ -117,6 +117,7 @@ class MainWidget(QMainWindow):
         dock.setObjectName("EP_selection")
         self.selector_widget = SelectorWidget(self, dock)
         dock.setWidget(self.selector_widget)
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock)
 
         # middle: Graph
@@ -137,6 +138,7 @@ class MainWidget(QMainWindow):
         self.measurementWizard_widget = MeasurementWizardWidget(self, dock)
         dock.setWidget(self.measurementWizard_widget)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock)
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
 
         dock2 = QDockWidget("Aggregation and Analysis", self)
         dock2.setObjectName("EP_agg_ana")
@@ -144,6 +146,7 @@ class MainWidget(QMainWindow):
         dock2.setWidget(self.postprocessing_widget)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock2)
         self.tabifyDockWidget(dock2, dock)
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
 
         # bottom widget
         dock = QDockWidget("Color Info", self)
@@ -152,12 +155,14 @@ class MainWidget(QMainWindow):
         self.min_max_value_updated_event += self.color_widget.update_min_max
         dock.setWidget(self.color_widget)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock)
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
 
         dock = QDockWidget("Graph Limits", self)
         dock.setObjectName("EP_graph_limits")
         self.graph_limits_widget = GraphLimitsWidget(self, self.data_display)
         dock.setWidget(self.graph_limits_widget)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, dock, Qt.Orientation.Horizontal)
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
 
         dock2 = QDockWidget("Log", self)
         dock2.setObjectName("EP_log")
@@ -165,6 +170,7 @@ class MainWidget(QMainWindow):
         dock2.setWidget(self.log_widget)
         self.tabifyDockWidget(dock, dock2)
         dock2.hide()
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
 
         dock2 = QDockWidget("Ranking", self)
         dock2.setObjectName("EP_ranking")
@@ -172,6 +178,7 @@ class MainWidget(QMainWindow):
         dock2.setWidget(self.ranking_widget)
         self.tabifyDockWidget(dock, dock2)
         dock2.hide()
+        dock.setAllowedAreas(Qt.DockWidgetArea.AllDockWidgetAreas ^ Qt.DockWidgetArea.TopDockWidgetArea)
         # Menu creation
 
         # File menu
