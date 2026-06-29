@@ -42,6 +42,7 @@ from extrap.gui.RankingWidget import RankingWidget
 from extrap.gui.SelectorWidget import SelectorWidget
 from extrap.gui.StrongScalingConversionDialog import StrongScalingConversionDialog
 from extrap.gui.comparison.comparison_wizard import ComparisonWizard
+from extrap.gui.components.robust_wizard import RobustModelWizard
 from extrap.gui.components import file_dialog
 from extrap.gui.components.ProgressWindow import ProgressWindow
 from extrap.gui.components.about_dialog import AboutDialog
@@ -49,6 +50,7 @@ from extrap.gui.components.developer_tools import init_developer_menu, DEV_CONFI
 from extrap.gui.components.model_color_map import ModelColorMap
 from extrap.gui.components.plot_formatting_options import PlotFormattingOptions, PlotFormattingDialog
 from extrap.modelers.model_generator import ModelGenerator
+from extrap.modelers.robust import RobustModel
 from extrap.util.deprecation import deprecated
 from extrap.util.dynamic_options import DynamicOptions
 from extrap.util.event import Event
@@ -251,6 +253,11 @@ class MainWidget(QMainWindow):
         compare_action.setEnabled(False)
         self.compare_action = compare_action
 
+        # robust model creation menu
+        create_robust_action = QAction('Create robust model', self)
+        create_robust_action.setStatusTip('Creates a robust model with two experiments')
+        create_robust_action.triggered.connect(self.create_robust_model_wizard)
+
         # Filter menu
         # filter_callpath_action = QAction('Filter Callpaths', self)
         # filter_callpath_action.setShortcut('Ctrl+F')
@@ -272,6 +279,8 @@ class MainWidget(QMainWindow):
         file_menu.addAction(open_experiment_action)
         file_menu.addAction(save_experiment_action)
         file_menu.addAction(compare_action)
+        file_menu.addSeparator()
+        file_menu.addAction(create_robust_action)
         file_menu.addSeparator()
         file_menu.addAction(screenshot_action)
         file_menu.addSeparator()
@@ -427,6 +436,17 @@ class MainWidget(QMainWindow):
     @deprecated
     def getFontSize(self):
         return self.plot_formatting_options.font_size
+
+    def create_robust_model_wizard(self):
+        rw = RobustModelWizard()
+
+        def on_accept():
+            robust_experiment = RobustModel.createRobustModel(
+                experiment_BB=rw.exp_swc,experiment_TIME=rw.exp_time,use_measure=rw.use_measure)
+            self.set_experiment(robust_experiment)
+
+        rw.accepted.connect(on_accept)
+        rw.open()
 
     def screenshot(self, _checked=False, target=None, name_addition=""):
         """
